@@ -61,21 +61,10 @@ class ParentNode(HTMLNode):
 
         return f'<{self.tag}>{"".join(list(map(lambda childnode: childnode.to_html(),self.children)))}</{self.tag}>'
 
-"""
-def text_node_to_html_node(text_node):
-    if text_node != TextType.TEXT.value:
-        return
-
-    elif TextType.BOLD:
-    elif TextType.ITALIC:
-    elif TextType.CODE:
-    elif TextType.LINK:
-    elif TextType.IMAGE:
-    else:
-        raise Exception("Wrong node")
 
 
-"""
+
+
 
 """
 t should handle each type of the TextType enum. If it gets a TextNode that is none of those types, it should raise an exception. Otherwise, it should return a new LeafNode object.
