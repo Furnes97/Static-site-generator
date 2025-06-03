@@ -107,9 +107,44 @@ def split_nodes_link(old_nodes):
             new_nodes.append(TextNode(original_text, TextType.TEXT))
     return new_nodes
 
-node = TextNode(
-    "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
-    TextType.TEXT,
-)
-new_nodes = split_nodes_link([node])
-print(new_nodes)
+def text_to_textnodes(text):
+
+    nodes = [TextNode(text, TextType.TEXT)]
+    nodes = split_nodes_delimiter(nodes,"**", TextType.BOLD)
+    nodes = split_nodes_delimiter(nodes,"_", TextType.ITALIC)
+    nodes = split_nodes_delimiter(nodes,"`", TextType.CODE)
+    nodes = split_nodes_image(nodes)
+    nodes = split_nodes_link(nodes)
+
+    return nodes
+
+
+def markdown_to_blocks(markdown):
+    clean_list = []
+    markdown_list = markdown.split("\n\n")
+    #markdown_list.extend(markdown.split("\n\n"))
+    clean_list = list(filter(None, markdown_list))
+    final_list = [element.strip() for element in clean_list]
+
+
+
+
+    #for element in
+    return final_list
+
+mdstring = """
+This is **bolded** paragraph
+
+
+This is another paragraph with _italic_ text and `code` here
+This is the same paragraph on a new line
+
+
+
+
+
+- This is a list
+- with items
+"""
+
+print(markdown_to_blocks(mdstring))
