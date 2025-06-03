@@ -1,4 +1,4 @@
-from markdown_node import split_nodes_delimiter
+from markdown_node import split_nodes_delimiter, extract_markdown_images, extract_markdown_links
 from textnode import TextNode, TextType
 import unittest
 
@@ -44,3 +44,12 @@ class TestSplitNodesDelimiter(unittest.TestCase):
                 TextNode("italic", TextType.ITALIC),
             ]
         self.assertEqual(result, new_nodes)
+
+class TestRegExpressLink(unittest.TestCase):
+    def test_extract_markdown_images(self):
+        matches = extract_markdown_images("This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)")
+        self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
+
+    def test_extract_markdown_link(self):
+        matches = extract_markdown_links("This is a text with a link [this is some explaining](https:/www.facebook.com) and [link to google](https://www.google.com)")
+        self.assertListEqual(matches, [("this is some explaining", "https:/www.facebook.com"),("link to google", "https://www.google.com")])
