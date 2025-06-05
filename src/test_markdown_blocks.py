@@ -1,5 +1,5 @@
 
-from markdown_blocks import BlockType, markdown_to_blocks, block_to_block_type
+from markdown_blocks import BlockType, markdown_to_blocks, block_to_block_type, markdown_to_html_node
 
 import unittest
 
@@ -116,6 +116,45 @@ class TestBlockToBlockType(unittest.TestCase):
         case = block_to_block_type("- hell\n- world\n- just work please")
         answer = BlockType.UNORDERED_LIST
         self.assertEqual(answer, case)
+
+
+    def test_block_to_block_types(self):
+        block = "# heading"
+        self.assertEqual(block_to_block_type(block), BlockType.HEADING)
+        block = "```\ncode\n```"
+        self.assertEqual(block_to_block_type(block), BlockType.CODE)
+        block = "> quote\n> more quote"
+        self.assertEqual(block_to_block_type(block), BlockType.QUOTE)
+        block = "- list\n- items"
+        self.assertEqual(block_to_block_type(block), BlockType.UNORDERED_LIST)
+        block = "1. list\n2. items"
+        self.assertEqual(block_to_block_type(block), BlockType.ORDERED_LIST)
+        block = "paragraph"
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
+
+
+class Test_Markdown_to_HTML(unittest.TestCase):
+    def test_paragraphs(self):
+        md = """
+This is **bolded** paragraph
+text in a p
+tag here
+
+This is another paragraph with _italic_ text and `code` here
+
+    """
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        print("----_____-----____----__---__--_-__-__")
+        print(html)
+        self.assertEqual(
+            html,
+            "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+        )
+
+
+
 
 if __name__ == "__main__":
     unittest.main()
