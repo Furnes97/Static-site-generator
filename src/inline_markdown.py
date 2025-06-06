@@ -1,34 +1,17 @@
-from textnode import TextNode, TextType
 import re
 
-'''
-def split_nodes_delimiter(old_nodes, delimiter, text_type):
-    new_nodes = []
-    split_nodes_list = []
-    for node in old_nodes:
-        if node.text_type == TextType.TEXT:
-            new_nodes.extend(node.text.split(delimiter))
-        else:
-            return (new_nodes.append(node))
-    if len(split_nodes_list) % 2 == 0:
-        raise ValueError("invalid markdown, formatted section not closed")
-    for i in range(len(split_nodes_list)):
-        if i == 0 or (i % 2) == 0:
-            new_nodes.append(TextNode(split_nodes_list[i], TextType.TEXT))
-        else:
-            new_nodes.append(TextNode(split_nodes_list[i], text_type))
-    return new_nodes
-'''
-def text_to_textnodes(text):
+from textnode import TextNode, TextType
 
+
+def text_to_textnodes(text):
     nodes = [TextNode(text, TextType.TEXT)]
-    nodes = split_nodes_delimiter(nodes,"**", TextType.BOLD)
-    nodes = split_nodes_delimiter(nodes,"_", TextType.ITALIC)
-    nodes = split_nodes_delimiter(nodes,"`", TextType.CODE)
+    nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+    nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
+    nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_link(nodes)
-
     return nodes
+
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
@@ -49,18 +32,6 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                 split_nodes.append(TextNode(sections[i], text_type))
         new_nodes.extend(split_nodes)
     return new_nodes
-
-
-def extract_markdown_images(text):
-    alt_text_matches = re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
-    #url_text_matches = re.findall(r"", text)
-
-    return alt_text_matches
-
-
-def extract_markdown_links(text):
-    link_text_matches = re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
-    return link_text_matches
 
 
 def split_nodes_image(old_nodes):
@@ -115,3 +86,15 @@ def split_nodes_link(old_nodes):
         if original_text != "":
             new_nodes.append(TextNode(original_text, TextType.TEXT))
     return new_nodes
+
+
+def extract_markdown_images(text):
+    pattern = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
+    matches = re.findall(pattern, text)
+    return matches
+
+
+def extract_markdown_links(text):
+    pattern = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
+    matches = re.findall(pattern, text)
+    return matches
