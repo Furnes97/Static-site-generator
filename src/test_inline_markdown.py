@@ -6,8 +6,9 @@ from inline_markdown import (
     text_to_textnodes,
     extract_markdown_links,
     extract_markdown_images,
-)
 
+)
+from markdown_to_html import extract_title
 from textnode import TextNode, TextType
 
 
@@ -190,6 +191,27 @@ class TestInlineMarkdown(unittest.TestCase):
             ],
             nodes,
         )
+
+    def test_extract_title(self):
+        t = extract_title("# hello\nmy name Jeff")
+        a = "hello"
+        self.assertEqual(t,a)
+
+
+
+
+    def test_extract_title_2(self):
+        t = extract_title("hello\nmy name Jeff\n# hidden title")
+        a = "hidden title"
+        self.assertEqual(t,a)
+
+
+
+
+    def test_extract_title_3(self):
+        t = extract_title("hello\nmy name Jeff\n### hidden title\n    # What another hidden gem ??     ")
+        a = "What another hidden gem ??"
+        self.assertEqual(t,a)
 
 
 if __name__ == "__main__":
