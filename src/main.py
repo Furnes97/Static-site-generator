@@ -2,41 +2,35 @@ import os
 from textnode import TextNode, TextType
 from folder_management import file_dir_paths
 from shutil import rmtree, copy
-
+import sys
 from markdown_to_html import generate_page, generate_pages_recursive
 
-
+path_to_public = "./docs"
+path_to_static = "./static"
+content_path = "./content"
+path_to_template = "./template.html"
+default_basepath = "/"
 
 def main():
-    path_to_public = "public"
-    path_to_static = "static"
+    basepath = default_basepath
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
 
     rmtree(path_to_public)
-
     os.mkdir(path_to_public)
 
 
     file_paths, dir_paths = file_dir_paths(path_to_static)
     dir_paths.sort(key=lambda d_path: d_path.count("/"))
 
-
     for path in dir_paths:
         os.mkdir(os.path.join(path_to_public, os.path.relpath(path, path_to_static)))
-
 
     for path in file_paths:
         new_path = os.path.join(path_to_public, os.path.relpath(path, path_to_static))
         copy(path, new_path)
 
-
-
-
-
-    content_path = "content"
-    path_to_template = "template.html"
-
-
-    generate_pages_recursive(content_path, path_to_template, path_to_public)
+    generate_pages_recursive(content_path, path_to_template, path_to_public, basepath)
 
     #generate_pages_recursive(content_path, path_to_template, path_to_public)
     #markdown_1_path = "content/index.md"
